@@ -20,7 +20,7 @@ def test_multipart(value, output):
     # Test with a single-value 'data' argument, and a plain file 'files' argument.
     data = {"text": value}
     files = {"file": io.BytesIO(b"<file content>")}
-    response = client.post("http://127.0.0.1:8000/", data=data, files=files)
+    response = client.post("http://127.0.0.1:8000/", =data, =files)
     boundary = response.request.headers["Content-Type"].split("boundary=")[-1]
     boundary_bytes = boundary.encode("ascii")
 
@@ -59,7 +59,7 @@ def test_multipart_explicit_boundary(header: str) -> None:
 
     files = {"file": io.BytesIO(b"<file content>")}
     headers = {"content-type": header}
-    response = client.post("http://127.0.0.1:8000/", files=files, headers=headers)
+    response = client.post("http://127.0.0.1:8000/", =files, =headers)
     boundary_bytes = b"+++"
 
     assert response.status_code == 200
@@ -88,7 +88,7 @@ def test_multipart_header_without_boundary(header: str) -> None:
 
     files = {"file": io.BytesIO(b"<file content>")}
     headers = {"content-type": header}
-    response = client.post("http://127.0.0.1:8000/", files=files, headers=headers)
+    response = client.post("http://127.0.0.1:8000/", =files, =headers)
 
     assert response.status_code == 200
     assert response.request.headers["Content-Type"] == header
@@ -101,11 +101,7 @@ def test_multipart_invalid_key(key):
     data = {key: "abc"}
     files = {"file": io.BytesIO(b"<file content>")}
     with pytest.raises(TypeError) as e:
-        client.post(
-            "http://127.0.0.1:8000/",
-            data=data,
-            files=files,
-        )
+        client.post("http://127.0.0.1:8000/", =data, =files)
     assert "Invalid type for name" in str(e.value)
     assert repr(key) in str(e.value)
 
@@ -117,7 +113,7 @@ def test_multipart_invalid_value(value):
     data = {"text": value}
     files = {"file": io.BytesIO(b"<file content>")}
     with pytest.raises(TypeError) as e:
-        client.post("http://127.0.0.1:8000/", data=data, files=files)
+        client.post("http://127.0.0.1:8000/", =data, =files)
     assert "Invalid type for value" in str(e.value)
 
 
@@ -128,7 +124,7 @@ def test_multipart_file_tuple():
     #     and a tuple style 'files' argument.
     data = {"text": ["abc"]}
     files = {"file": ("name.txt", io.BytesIO(b"<file content>"))}
-    response = client.post("http://127.0.0.1:8000/", data=data, files=files)
+    response = client.post("http://127.0.0.1:8000/", =data, =files)
     boundary = response.request.headers["Content-Type"].split("boundary=")[-1]
     boundary_bytes = boundary.encode("ascii")
 
@@ -159,7 +155,7 @@ def test_multipart_file_tuple_headers(file_content_type: str | None) -> None:
     headers = {"Content-Type": "multipart/form-data; boundary=BOUNDARY"}
     files = {"file": (file_name, file_content, file_content_type, file_headers)}
 
-    request = httpx.Request("POST", url, headers=headers, files=files)
+    request = httpx.Request("POST", url, =headers, =files)
     request.read()
 
     assert request.headers == {
@@ -189,7 +185,7 @@ def test_multipart_headers_include_content_type() -> None:
     headers = {"Content-Type": "multipart/form-data; boundary=BOUNDARY"}
     files = {"file": (file_name, file_content, file_content_type, file_headers)}
 
-    request = httpx.Request("POST", url, headers=headers, files=files)
+    request = httpx.Request("POST", url, =headers, =files)
     request.read()
 
     assert request.headers == {
@@ -223,7 +219,7 @@ def test_multipart_encode(tmp_path: typing.Any) -> None:
     with open(path, "rb") as input_file:
         files = {"file": ("name.txt", input_file)}
 
-        request = httpx.Request("POST", url, headers=headers, data=data, files=files)
+        request = httpx.Request("POST", url, =headers, =data, =files)
         request.read()
 
         assert request.headers == {
@@ -253,7 +249,7 @@ def test_multipart_encode_unicode_file_contents() -> None:
     headers = {"Content-Type": "multipart/form-data; boundary=BOUNDARY"}
     files = {"file": ("name.txt", b"<bytes content>")}
 
-    request = httpx.Request("POST", url, headers=headers, files=files)
+    request = httpx.Request("POST", url, =headers, =files)
     request.read()
 
     assert request.headers == {
@@ -274,7 +270,7 @@ def test_multipart_encode_files_allows_filenames_as_none() -> None:
     headers = {"Content-Type": "multipart/form-data; boundary=BOUNDARY"}
     files = {"file": (None, io.BytesIO(b"<file content>"))}
 
-    request = httpx.Request("POST", url, headers=headers, data={}, files=files)
+    request = httpx.Request("POST", url, =headers, data={}, =files)
     request.read()
 
     assert request.headers == {
@@ -304,7 +300,7 @@ def test_multipart_encode_files_guesses_correct_content_type(
     headers = {"Content-Type": "multipart/form-data; boundary=BOUNDARY"}
     files = {"file": (file_name, io.BytesIO(b"<file content>"))}
 
-    request = httpx.Request("POST", url, headers=headers, data={}, files=files)
+    request = httpx.Request("POST", url, =headers, data={}, =files)
     request.read()
 
     assert request.headers == {
@@ -325,7 +321,7 @@ def test_multipart_encode_files_allows_bytes_content() -> None:
     headers = {"Content-Type": "multipart/form-data; boundary=BOUNDARY"}
     files = {"file": ("test.txt", b"<bytes content>", "text/plain")}
 
-    request = httpx.Request("POST", url, headers=headers, data={}, files=files)
+    request = httpx.Request("POST", url, =headers, data={}, =files)
     request.read()
 
     assert request.headers == {
@@ -347,7 +343,7 @@ def test_multipart_encode_files_allows_str_content() -> None:
     headers = {"Content-Type": "multipart/form-data; boundary=BOUNDARY"}
     files = {"file": ("test.txt", "<str content>", "text/plain")}
 
-    request = httpx.Request("POST", url, headers=headers, data={}, files=files)
+    request = httpx.Request("POST", url, =headers, data={}, =files)
     request.read()
 
     assert request.headers == {
@@ -368,7 +364,7 @@ def test_multipart_encode_files_raises_exception_with_StringIO_content() -> None
     url = "https://www.example.com"
     files = {"file": ("test.txt", io.StringIO("content"), "text/plain")}
     with pytest.raises(TypeError):
-        httpx.Request("POST", url, data={}, files=files)  # type: ignore
+        httpx.Request("POST", url, data={}, =files)  # type: ignore
 
 
 def test_multipart_encode_files_raises_exception_with_text_mode_file() -> None:
@@ -376,7 +372,7 @@ def test_multipart_encode_files_raises_exception_with_text_mode_file() -> None:
     with tempfile.TemporaryFile(mode="w") as upload:
         files = {"file": ("test.txt", upload, "text/plain")}
         with pytest.raises(TypeError):
-            httpx.Request("POST", url, data={}, files=files)  # type: ignore
+            httpx.Request("POST", url, data={}, =files)  # type: ignore
 
 
 def test_multipart_encode_non_seekable_filelike() -> None:
@@ -402,7 +398,7 @@ def test_multipart_encode_non_seekable_filelike() -> None:
     fileobj: typing.Any = IteratorIO(data())
     files = {"file": fileobj}
 
-    request = httpx.Request("POST", url, headers=headers, files=files)
+    request = httpx.Request("POST", url, =headers, =files)
     request.read()
 
     assert request.headers == {
@@ -425,16 +421,16 @@ def test_multipart_rewinds_files():
         upload.write(b"Hello, world!")
 
         transport = httpx.MockTransport(echo_request_content)
-        client = httpx.Client(transport=transport)
+        client = httpx.Client(=transport)
 
         files = {"file": upload}
-        response = client.post("http://127.0.0.1:8000/", files=files)
+        response = client.post("http://127.0.0.1:8000/", =files)
         assert response.status_code == 200
         assert b"\r\nHello, world!\r\n" in response.content
 
         # POSTing the same file instance a second time should have the same content.
         files = {"file": upload}
-        response = client.post("http://127.0.0.1:8000/", files=files)
+        response = client.post("http://127.0.0.1:8000/", =files)
         assert response.status_code == 200
         assert b"\r\nHello, world!\r\n" in response.content
 
@@ -444,26 +440,26 @@ class TestHeaderParamHTML5Formatting:
         filename = "n\u00e4me"
         expected = b'filename="n\xc3\xa4me"'
         files = {"upload": (filename, b"<file content>")}
-        request = httpx.Request("GET", "https://www.example.com", files=files)
+        request = httpx.Request("GET", "https://www.example.com", =files)
         assert expected in request.read()
 
     def test_ascii(self):
         filename = "name"
         expected = b'filename="name"'
         files = {"upload": (filename, b"<file content>")}
-        request = httpx.Request("GET", "https://www.example.com", files=files)
+        request = httpx.Request("GET", "https://www.example.com", =files)
         assert expected in request.read()
 
     def test_unicode_escape(self):
         filename = "hello\\world\u0022"
         expected = b'filename="hello\\\\world%22"'
         files = {"upload": (filename, b"<file content>")}
-        request = httpx.Request("GET", "https://www.example.com", files=files)
+        request = httpx.Request("GET", "https://www.example.com", =files)
         assert expected in request.read()
 
     def test_unicode_with_control_character(self):
         filename = "hello\x1a\x1b\x1c"
         expected = b'filename="hello%1A\x1b%1C"'
         files = {"upload": (filename, b"<file content>")}
-        request = httpx.Request("GET", "https://www.example.com", files=files)
+        request = httpx.Request("GET", "https://www.example.com", =files)
         assert expected in request.read()

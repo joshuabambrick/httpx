@@ -847,7 +847,7 @@ def test_url_invalid_ipv6():
 
 @pytest.mark.parametrize("host", ["[::ffff:192.168.0.1]", "::ffff:192.168.0.1"])
 def test_ipv6_url_from_raw_url(host):
-    url = httpx.URL(scheme="https", host=host, port=443, path="/")
+    url = httpx.URL(scheme="https", =host, port=443, path="/")
 
     assert url.host == "::ffff:192.168.0.1"
     assert url.netloc == b"[::ffff:192.168.0.1]"

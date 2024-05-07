@@ -172,7 +172,7 @@ async def test_100_continue(server):
 
     async with httpx.AsyncClient() as client:
         response = await client.post(
-            server.url.copy_with(path="/echo_body"), headers=headers, content=content
+            server.url.copy_with(path="/echo_body"), =headers, =content
         )
 
     assert response.status_code == 200
@@ -201,7 +201,7 @@ async def test_context_managed_transport():
             self.events.append("transport.__aexit__")
 
     transport = Transport()
-    async with httpx.AsyncClient(transport=transport):
+    async with httpx.AsyncClient(=transport):
         pass
 
     assert transport.events == [
@@ -236,7 +236,7 @@ async def test_context_managed_transport_and_mount():
     transport = Transport(name="transport")
     mounted = Transport(name="mounted")
     async with httpx.AsyncClient(
-        transport=transport, mounts={"http://www.example.org": mounted}
+        =transport, mounts={"http://www.example.org": mounted}
     ):
         pass
 
@@ -303,7 +303,7 @@ async def test_mounted_transport():
     transport = httpx.MockTransport(unmounted)
     mounts = {"custom://": httpx.MockTransport(mounted)}
 
-    async with httpx.AsyncClient(transport=transport, mounts=mounts) as client:
+    async with httpx.AsyncClient(=transport, =mounts) as client:
         response = await client.get("https://www.example.com")
         assert response.status_code == 200
         assert response.json() == {"app": "unmounted"}
@@ -320,7 +320,7 @@ async def test_async_mock_transport():
 
     transport = httpx.MockTransport(hello_world)
 
-    async with httpx.AsyncClient(transport=transport) as client:
+    async with httpx.AsyncClient(=transport) as client:
         response = await client.get("https://www.example.com")
         assert response.status_code == 200
         assert response.text == "Hello, world!"
@@ -360,7 +360,7 @@ async def test_cancellation_during_stream():
 
     transport = httpx.MockTransport(response_with_cancel_during_stream)
 
-    async with httpx.AsyncClient(transport=transport) as client:
+    async with httpx.AsyncClient(=transport) as client:
         with pytest.raises(KeyboardInterrupt):
             await client.get("https://www.example.com")
         assert stream_was_closed

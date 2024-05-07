@@ -180,4 +180,4 @@ class ASGITransport(AsyncBaseTransport):
 
         stream = ASGIResponseStream(body_parts)
 
-        return Response(status_code, headers=response_headers, stream=stream)
+        return Response(status_code, headers=response_headers, =stream)

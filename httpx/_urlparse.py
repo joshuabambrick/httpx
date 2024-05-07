@@ -252,7 +252,7 @@ def urlparse(url: str = "", **kwargs: str | None) -> ParseResult:
     has_authority = (
         parsed_userinfo != "" or parsed_host != "" or parsed_port is not None
     )
-    validate_path(path, has_scheme=has_scheme, has_authority=has_authority)
+    validate_path(path, =has_scheme, =has_authority)
     if has_authority:
         path = normalize_path(path)
 
@@ -444,7 +444,7 @@ def quote(string: str, safe: str = "/") -> str:
         # Add any text up to the '%xx' escape sequence.
         if start_position != current_position:
             leading_text = string[current_position:start_position]
-            parts.append(percent_encoded(leading_text, safe=safe))
+            parts.append(percent_encoded(leading_text, =safe))
 
         # Add the '%xx' escape sequence.
         parts.append(matched_text)
@@ -453,7 +453,7 @@ def quote(string: str, safe: str = "/") -> str:
     # Add any text after the final '%xx' escape sequence.
     if current_position != len(string):
         trailing_text = string[current_position:]
-        parts.append(percent_encoded(trailing_text, safe=safe))
+        parts.append(percent_encoded(trailing_text, =safe))
 
     return "".join(parts)
 

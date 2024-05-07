@@ -23,7 +23,7 @@ def test_set_cookie() -> None:
     cookies = {"example-name": "example-value"}
 
     client = httpx.Client(
-        cookies=cookies, transport=httpx.MockTransport(get_and_set_cookies)
+        =cookies, transport=httpx.MockTransport(get_and_set_cookies)
     )
     response = client.get(url)
 
@@ -40,7 +40,7 @@ def test_set_per_request_cookie_is_deprecated() -> None:
 
     client = httpx.Client(transport=httpx.MockTransport(get_and_set_cookies))
     with pytest.warns(DeprecationWarning):
-        response = client.get(url, cookies=cookies)
+        response = client.get(url, =cookies)
 
     assert response.status_code == 200
     assert response.json() == {"cookies": "example-name=example-value"}
@@ -75,7 +75,7 @@ def test_set_cookie_with_cookiejar() -> None:
     cookies.set_cookie(cookie)
 
     client = httpx.Client(
-        cookies=cookies, transport=httpx.MockTransport(get_and_set_cookies)
+        =cookies, transport=httpx.MockTransport(get_and_set_cookies)
     )
     response = client.get(url)
 
@@ -112,7 +112,7 @@ def test_setting_client_cookies_to_cookiejar() -> None:
     cookies.set_cookie(cookie)
 
     client = httpx.Client(
-        cookies=cookies, transport=httpx.MockTransport(get_and_set_cookies)
+        =cookies, transport=httpx.MockTransport(get_and_set_cookies)
     )
     response = client.get(url)
 

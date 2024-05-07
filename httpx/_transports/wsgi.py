@@ -146,4 +146,4 @@ class WSGITransport(BaseTransport):
             for key, value in seen_response_headers
         ]
 
-        return Response(status_code, headers=headers, stream=stream)
+        return Response(status_code, =headers, =stream)

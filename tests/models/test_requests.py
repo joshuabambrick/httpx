@@ -44,7 +44,7 @@ def test_generator_with_content_length_header():
 
     headers = {"Content-Length": "8"}
     request = httpx.Request(
-        "POST", "http://example.org", content=content(), headers=headers
+        "POST", "http://example.org", content=content(), =headers
     )
     assert request.headers == {"Host": "example.org", "Content-Length": "8"}
 
@@ -131,7 +131,7 @@ def test_ignore_transfer_encoding_header_if_content_length_exists():
     data = streaming_body(b"abcd")
 
     headers = {"Content-Length": "4"}
-    request = httpx.Request("POST", "http://example.org", content=data, headers=headers)
+    request = httpx.Request("POST", "http://example.org", content=data, =headers)
     assert "Transfer-Encoding" not in request.headers
     assert request.headers["Content-Length"] == "4"
 
@@ -139,14 +139,14 @@ def test_ignore_transfer_encoding_header_if_content_length_exists():
 def test_override_host_header():
     headers = {"host": "1.2.3.4:80"}
 
-    request = httpx.Request("GET", "http://example.org", headers=headers)
+    request = httpx.Request("GET", "http://example.org", =headers)
     assert request.headers["Host"] == "1.2.3.4:80"
 
 
 def test_override_accept_encoding_header():
     headers = {"Accept-Encoding": "identity"}
 
-    request = httpx.Request("GET", "http://example.org", headers=headers)
+    request = httpx.Request("GET", "http://example.org", =headers)
     assert request.headers["Accept-Encoding"] == "identity"
 
 
@@ -157,7 +157,7 @@ def test_override_content_length_header():
     data = streaming_body(b"test 123")
     headers = {"Content-Length": "8"}
 
-    request = httpx.Request("POST", "http://example.org", content=data, headers=headers)
+    request = httpx.Request("POST", "http://example.org", content=data, =headers)
     assert request.headers["Content-Length"] == "8"
 
 

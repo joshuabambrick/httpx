@@ -218,7 +218,7 @@ class DigestAuth(Auth):
             request, self._last_challenge
         )
         if response.cookies:
-            Cookies(response.cookies).set_cookie_header(request=request)
+            Cookies(response.cookies).set_cookie_header(=request)
         yield request
 
     def _parse_challenge(
@@ -246,11 +246,11 @@ class DigestAuth(Auth):
             opaque = header_dict["opaque"].encode() if "opaque" in header_dict else None
             qop = header_dict["qop"].encode() if "qop" in header_dict else None
             return _DigestAuthChallenge(
-                realm=realm, nonce=nonce, algorithm=algorithm, opaque=opaque, qop=qop
+                =realm, =nonce, =algorithm, =opaque, =qop
             )
         except KeyError as exc:
             message = "Malformed Digest WWW-Authenticate header"
-            raise ProtocolError(message, request=request) from exc
+            raise ProtocolError(message, =request) from exc
 
     def _build_auth_header(
         self, request: Request, challenge: _DigestAuthChallenge
@@ -275,7 +275,7 @@ class DigestAuth(Auth):
         if challenge.algorithm.lower().endswith("-sess"):
             HA1 = digest(b":".join((HA1, challenge.nonce, cnonce)))
 
-        qop = self._resolve_qop(challenge.qop, request=request)
+        qop = self._resolve_qop(challenge.qop, =request)
         if qop is None:
             # Following RFC 2069
             digest_data = [HA1, challenge.nonce, HA2]
@@ -337,7 +337,7 @@ class DigestAuth(Auth):
             raise NotImplementedError("Digest auth-int support is not yet implemented")
 
         message = f'Unexpected qop value "{qop!r}" in digest auth'
-        raise ProtocolError(message, request=request)
+        raise ProtocolError(message, =request)
 
 
 class _DigestAuthChallenge(typing.NamedTuple):

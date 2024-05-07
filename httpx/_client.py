@@ -130,7 +130,7 @@ class BoundSyncStream(SyncByteStream):
 
     def close(self) -> None:
         seconds = self._timer.sync_elapsed()
-        self._response.elapsed = datetime.timedelta(seconds=seconds)
+        self._response.elapsed = datetime.timedelta(=seconds)
         self._stream.close()
 
 
@@ -153,7 +153,7 @@ class BoundAsyncStream(AsyncByteStream):
 
     async def aclose(self) -> None:
         seconds = await self._timer.async_elapsed()
-        self._response.elapsed = datetime.timedelta(seconds=seconds)
+        self._response.elapsed = datetime.timedelta(=seconds)
         await self._stream.aclose()
 
 
@@ -217,7 +217,7 @@ class BaseClient:
         if proxies is None:
             if allow_env_proxies:
                 return {
-                    key: None if url is None else Proxy(url=url)
+                    key: None if url is None else Proxy(=url)
                     for key, url in get_environment_proxies().items()
                 }
             return {}
@@ -359,14 +359,14 @@ class BaseClient:
         return Request(
             method,
             url,
-            content=content,
-            data=data,
-            files=files,
-            json=json,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            extensions=extensions,
+            =content,
+            =data,
+            =files,
+            =json,
+            =params,
+            =headers,
+            =cookies,
+            =extensions,
         )
 
     def _merge_url(self, url: URLTypes) -> URL:
@@ -449,7 +449,7 @@ class BaseClient:
 
         username, password = request.url.username, request.url.password
         if username or password:
-            return BasicAuth(username=username, password=password)
+            return BasicAuth(=username, =password)
 
         return Auth()
 
@@ -464,11 +464,11 @@ class BaseClient:
         stream = self._redirect_stream(request, method)
         cookies = Cookies(self.cookies)
         return Request(
-            method=method,
-            url=url,
-            headers=headers,
-            cookies=cookies,
-            stream=stream,
+            =method,
+            =url,
+            =headers,
+            =cookies,
+            =stream,
             extensions=request.extensions,
         )
 
@@ -505,7 +505,7 @@ class BaseClient:
             url = URL(location)
         except InvalidURL as exc:
             raise RemoteProtocolError(
-                f"Invalid URL in location header: {exc}.", request=request
+                f"Invalid URL in location header: {exc}.", =request
             ) from None
 
         # Handle malformed 'Location' headers that are "absolute" form, have no host.
@@ -652,17 +652,17 @@ class Client(BaseClient):
         default_encoding: str | typing.Callable[[bytes], str] = "utf-8",
     ) -> None:
         super().__init__(
-            auth=auth,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            timeout=timeout,
-            follow_redirects=follow_redirects,
-            max_redirects=max_redirects,
-            event_hooks=event_hooks,
-            base_url=base_url,
-            trust_env=trust_env,
-            default_encoding=default_encoding,
+            =auth,
+            =params,
+            =headers,
+            =cookies,
+            =timeout,
+            =follow_redirects,
+            =max_redirects,
+            =event_hooks,
+            =base_url,
+            =trust_env,
+            =default_encoding,
         )
 
         if http2:
@@ -694,26 +694,26 @@ class Client(BaseClient):
         proxy_map = self._get_proxy_map(proxies or proxy, allow_env_proxies)
 
         self._transport = self._init_transport(
-            verify=verify,
-            cert=cert,
-            http1=http1,
-            http2=http2,
-            limits=limits,
-            transport=transport,
-            app=app,
-            trust_env=trust_env,
+            =verify,
+            =cert,
+            =http1,
+            =http2,
+            =limits,
+            =transport,
+            =app,
+            =trust_env,
         )
         self._mounts: dict[URLPattern, BaseTransport | None] = {
             URLPattern(key): None
             if proxy is None
             else self._init_proxy_transport(
                 proxy,
-                verify=verify,
-                cert=cert,
-                http1=http1,
-                http2=http2,
-                limits=limits,
-                trust_env=trust_env,
+                =verify,
+                =cert,
+                =http1,
+                =http2,
+                =limits,
+                =trust_env,
             )
             for key, proxy in proxy_map.items()
         }
@@ -739,15 +739,15 @@ class Client(BaseClient):
             return transport
 
         if app is not None:
-            return WSGITransport(app=app)
+            return WSGITransport(=app)
 
         return HTTPTransport(
-            verify=verify,
-            cert=cert,
-            http1=http1,
-            http2=http2,
-            limits=limits,
-            trust_env=trust_env,
+            =verify,
+            =cert,
+            =http1,
+            =http2,
+            =limits,
+            =trust_env,
         )
 
     def _init_proxy_transport(
@@ -761,13 +761,13 @@ class Client(BaseClient):
         trust_env: bool = True,
     ) -> BaseTransport:
         return HTTPTransport(
-            verify=verify,
-            cert=cert,
-            http1=http1,
-            http2=http2,
-            limits=limits,
-            trust_env=trust_env,
-            proxy=proxy,
+            =verify,
+            =cert,
+            =http1,
+            =http2,
+            =limits,
+            =trust_env,
+            =proxy,
         )
 
     def _transport_for_url(self, url: URL) -> BaseTransport:
@@ -823,19 +823,19 @@ class Client(BaseClient):
             warnings.warn(message, DeprecationWarning)
 
         request = self.build_request(
-            method=method,
-            url=url,
-            content=content,
-            data=data,
-            files=files,
-            json=json,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            timeout=timeout,
-            extensions=extensions,
+            =method,
+            =url,
+            =content,
+            =data,
+            =files,
+            =json,
+            =params,
+            =headers,
+            =cookies,
+            =timeout,
+            =extensions,
         )
-        return self.send(request, auth=auth, follow_redirects=follow_redirects)
+        return self.send(request, =auth, =follow_redirects)
 
     @contextmanager
     def stream(
@@ -866,24 +866,19 @@ class Client(BaseClient):
         [0]: /quickstart#streaming-responses
         """
         request = self.build_request(
-            method=method,
-            url=url,
-            content=content,
-            data=data,
-            files=files,
-            json=json,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            timeout=timeout,
-            extensions=extensions,
+            =method,
+            =url,
+            =content,
+            =data,
+            =files,
+            =json,
+            =params,
+            =headers,
+            =cookies,
+            =timeout,
+            =extensions,
         )
-        response = self.send(
-            request=request,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            stream=True,
-        )
+        response = self.send(=request, =auth, =follow_redirects, stream=True)
         try:
             yield response
         finally:
@@ -926,8 +921,8 @@ class Client(BaseClient):
 
         response = self._send_handling_auth(
             request,
-            auth=auth,
-            follow_redirects=follow_redirects,
+            =auth,
+            =follow_redirects,
             history=[],
         )
         try:
@@ -954,8 +949,8 @@ class Client(BaseClient):
             while True:
                 response = self._send_handling_redirects(
                     request,
-                    follow_redirects=follow_redirects,
-                    history=history,
+                    =follow_redirects,
+                    =history,
                 )
                 try:
                     try:
@@ -983,7 +978,7 @@ class Client(BaseClient):
         while True:
             if len(history) > self.max_redirects:
                 raise TooManyRedirects(
-                    "Exceeded maximum allowed redirects.", request=request
+                    "Exceeded maximum allowed redirects.", =request
                 )
 
             for hook in self._event_hooks["request"]:
@@ -1024,15 +1019,13 @@ class Client(BaseClient):
                 "Attempted to send an async request with a sync Client instance."
             )
 
-        with request_context(request=request):
+        with request_context(=request):
             response = transport.handle_request(request)
 
         assert isinstance(response.stream, SyncByteStream)
 
         response.request = request
-        response.stream = BoundSyncStream(
-            response.stream, response=response, timer=timer
-        )
+        response.stream = BoundSyncStream(response.stream, =response, =timer)
         self.cookies.extract_cookies(response)
         response.default_encoding = self._default_encoding
 
@@ -1067,13 +1060,13 @@ class Client(BaseClient):
         return self.request(
             "GET",
             url,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     def options(
@@ -1096,13 +1089,13 @@ class Client(BaseClient):
         return self.request(
             "OPTIONS",
             url,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     def head(
@@ -1125,13 +1118,13 @@ class Client(BaseClient):
         return self.request(
             "HEAD",
             url,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     def post(
@@ -1158,17 +1151,17 @@ class Client(BaseClient):
         return self.request(
             "POST",
             url,
-            content=content,
-            data=data,
-            files=files,
-            json=json,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =content,
+            =data,
+            =files,
+            =json,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     def put(
@@ -1195,17 +1188,17 @@ class Client(BaseClient):
         return self.request(
             "PUT",
             url,
-            content=content,
-            data=data,
-            files=files,
-            json=json,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =content,
+            =data,
+            =files,
+            =json,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     def patch(
@@ -1232,17 +1225,17 @@ class Client(BaseClient):
         return self.request(
             "PATCH",
             url,
-            content=content,
-            data=data,
-            files=files,
-            json=json,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =content,
+            =data,
+            =files,
+            =json,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     def delete(
@@ -1265,13 +1258,13 @@ class Client(BaseClient):
         return self.request(
             "DELETE",
             url,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     def close(self) -> None:
@@ -1399,17 +1392,17 @@ class AsyncClient(BaseClient):
         default_encoding: str | typing.Callable[[bytes], str] = "utf-8",
     ) -> None:
         super().__init__(
-            auth=auth,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            timeout=timeout,
-            follow_redirects=follow_redirects,
-            max_redirects=max_redirects,
-            event_hooks=event_hooks,
-            base_url=base_url,
-            trust_env=trust_env,
-            default_encoding=default_encoding,
+            =auth,
+            =params,
+            =headers,
+            =cookies,
+            =timeout,
+            =follow_redirects,
+            =max_redirects,
+            =event_hooks,
+            =base_url,
+            =trust_env,
+            =default_encoding,
         )
 
         if http2:
@@ -1441,14 +1434,14 @@ class AsyncClient(BaseClient):
         proxy_map = self._get_proxy_map(proxies or proxy, allow_env_proxies)
 
         self._transport = self._init_transport(
-            verify=verify,
-            cert=cert,
-            http1=http1,
-            http2=http2,
-            limits=limits,
-            transport=transport,
-            app=app,
-            trust_env=trust_env,
+            =verify,
+            =cert,
+            =http1,
+            =http2,
+            =limits,
+            =transport,
+            =app,
+            =trust_env,
         )
 
         self._mounts: dict[URLPattern, AsyncBaseTransport | None] = {
@@ -1456,12 +1449,12 @@ class AsyncClient(BaseClient):
             if proxy is None
             else self._init_proxy_transport(
                 proxy,
-                verify=verify,
-                cert=cert,
-                http1=http1,
-                http2=http2,
-                limits=limits,
-                trust_env=trust_env,
+                =verify,
+                =cert,
+                =http1,
+                =http2,
+                =limits,
+                =trust_env,
             )
             for key, proxy in proxy_map.items()
         }
@@ -1486,15 +1479,15 @@ class AsyncClient(BaseClient):
             return transport
 
         if app is not None:
-            return ASGITransport(app=app)
+            return ASGITransport(=app)
 
         return AsyncHTTPTransport(
-            verify=verify,
-            cert=cert,
-            http1=http1,
-            http2=http2,
-            limits=limits,
-            trust_env=trust_env,
+            =verify,
+            =cert,
+            =http1,
+            =http2,
+            =limits,
+            =trust_env,
         )
 
     def _init_proxy_transport(
@@ -1508,13 +1501,13 @@ class AsyncClient(BaseClient):
         trust_env: bool = True,
     ) -> AsyncBaseTransport:
         return AsyncHTTPTransport(
-            verify=verify,
-            cert=cert,
-            http1=http1,
-            http2=http2,
-            limits=limits,
-            trust_env=trust_env,
-            proxy=proxy,
+            =verify,
+            =cert,
+            =http1,
+            =http2,
+            =limits,
+            =trust_env,
+            =proxy,
         )
 
     def _transport_for_url(self, url: URL) -> AsyncBaseTransport:
@@ -1571,19 +1564,19 @@ class AsyncClient(BaseClient):
             warnings.warn(message, DeprecationWarning)
 
         request = self.build_request(
-            method=method,
-            url=url,
-            content=content,
-            data=data,
-            files=files,
-            json=json,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            timeout=timeout,
-            extensions=extensions,
+            =method,
+            =url,
+            =content,
+            =data,
+            =files,
+            =json,
+            =params,
+            =headers,
+            =cookies,
+            =timeout,
+            =extensions,
         )
-        return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+        return await self.send(request, =auth, =follow_redirects)
 
     @asynccontextmanager
     async def stream(
@@ -1614,22 +1607,22 @@ class AsyncClient(BaseClient):
         [0]: /quickstart#streaming-responses
         """
         request = self.build_request(
-            method=method,
-            url=url,
-            content=content,
-            data=data,
-            files=files,
-            json=json,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            timeout=timeout,
-            extensions=extensions,
+            =method,
+            =url,
+            =content,
+            =data,
+            =files,
+            =json,
+            =params,
+            =headers,
+            =cookies,
+            =timeout,
+            =extensions,
         )
         response = await self.send(
-            request=request,
-            auth=auth,
-            follow_redirects=follow_redirects,
+            =request,
+            =auth,
+            =follow_redirects,
             stream=True,
         )
         try:
@@ -1674,8 +1667,8 @@ class AsyncClient(BaseClient):
 
         response = await self._send_handling_auth(
             request,
-            auth=auth,
-            follow_redirects=follow_redirects,
+            =auth,
+            =follow_redirects,
             history=[],
         )
         try:
@@ -1702,8 +1695,8 @@ class AsyncClient(BaseClient):
             while True:
                 response = await self._send_handling_redirects(
                     request,
-                    follow_redirects=follow_redirects,
-                    history=history,
+                    =follow_redirects,
+                    =history,
                 )
                 try:
                     try:
@@ -1731,7 +1724,7 @@ class AsyncClient(BaseClient):
         while True:
             if len(history) > self.max_redirects:
                 raise TooManyRedirects(
-                    "Exceeded maximum allowed redirects.", request=request
+                    "Exceeded maximum allowed redirects.", =request
                 )
 
             for hook in self._event_hooks["request"]:
@@ -1773,14 +1766,12 @@ class AsyncClient(BaseClient):
                 "Attempted to send an sync request with an AsyncClient instance."
             )
 
-        with request_context(request=request):
+        with request_context(=request):
             response = await transport.handle_async_request(request)
 
         assert isinstance(response.stream, AsyncByteStream)
         response.request = request
-        response.stream = BoundAsyncStream(
-            response.stream, response=response, timer=timer
-        )
+        response.stream = BoundAsyncStream(response.stream, =response, =timer)
         self.cookies.extract_cookies(response)
         response.default_encoding = self._default_encoding
 
@@ -1815,13 +1806,13 @@ class AsyncClient(BaseClient):
         return await self.request(
             "GET",
             url,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     async def options(
@@ -1844,13 +1835,13 @@ class AsyncClient(BaseClient):
         return await self.request(
             "OPTIONS",
             url,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     async def head(
@@ -1873,13 +1864,13 @@ class AsyncClient(BaseClient):
         return await self.request(
             "HEAD",
             url,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     async def post(
@@ -1906,17 +1897,17 @@ class AsyncClient(BaseClient):
         return await self.request(
             "POST",
             url,
-            content=content,
-            data=data,
-            files=files,
-            json=json,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =content,
+            =data,
+            =files,
+            =json,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     async def put(
@@ -1943,17 +1934,17 @@ class AsyncClient(BaseClient):
         return await self.request(
             "PUT",
             url,
-            content=content,
-            data=data,
-            files=files,
-            json=json,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =content,
+            =data,
+            =files,
+            =json,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     async def patch(
@@ -1980,17 +1971,17 @@ class AsyncClient(BaseClient):
         return await self.request(
             "PATCH",
             url,
-            content=content,
-            data=data,
-            files=files,
-            json=json,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =content,
+            =data,
+            =files,
+            =json,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     async def delete(
@@ -2013,13 +2004,13 @@ class AsyncClient(BaseClient):
         return await self.request(
             "DELETE",
             url,
-            params=params,
-            headers=headers,
-            cookies=cookies,
-            auth=auth,
-            follow_redirects=follow_redirects,
-            timeout=timeout,
-            extensions=extensions,
+            =params,
+            =headers,
+            =cookies,
+            =auth,
+            =follow_redirects,
+            =timeout,
+            =extensions,
         )
 
     async def aclose(self) -> None:

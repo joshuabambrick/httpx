@@ -13,27 +13,27 @@ def redirects(request: httpx.Request) -> httpx.Response:
         status_code = httpx.codes.MOVED_PERMANENTLY
         content = b"<a href='https://example.org/'>here</a>"
         headers = {"location": "https://example.org/"}
-        return httpx.Response(status_code, headers=headers, content=content)
+        return httpx.Response(status_code, =headers, =content)
 
     elif request.url.path == "/redirect_302":
         status_code = httpx.codes.FOUND
         headers = {"location": "https://example.org/"}
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
     elif request.url.path == "/redirect_303":
         status_code = httpx.codes.SEE_OTHER
         headers = {"location": "https://example.org/"}
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
     elif request.url.path == "/relative_redirect":
         status_code = httpx.codes.SEE_OTHER
         headers = {"location": "/"}
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
     elif request.url.path == "/malformed_redirect":
         status_code = httpx.codes.SEE_OTHER
         headers = {"location": "https://:443/"}
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
     elif request.url.path == "/invalid_redirect":
         status_code = httpx.codes.SEE_OTHER
@@ -43,7 +43,7 @@ def redirects(request: httpx.Request) -> httpx.Response:
     elif request.url.path == "/no_scheme_redirect":
         status_code = httpx.codes.SEE_OTHER
         headers = {"location": "//example.org/"}
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
     elif request.url.path == "/multiple_redirects":
         params = httpx.QueryParams(request.url.query)
@@ -57,17 +57,17 @@ def redirects(request: httpx.Request) -> httpx.Response:
             headers = {"location": location}
         else:
             headers = {}
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
     if request.url.path == "/redirect_loop":
         status_code = httpx.codes.SEE_OTHER
         headers = {"location": "/redirect_loop"}
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
     elif request.url.path == "/cross_domain":
         status_code = httpx.codes.SEE_OTHER
         headers = {"location": "https://example.org/cross_domain_target"}
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
     elif request.url.path == "/cross_domain_target":
         status_code = httpx.codes.OK
@@ -80,12 +80,12 @@ def redirects(request: httpx.Request) -> httpx.Response:
     elif request.url.path == "/redirect_body":
         status_code = httpx.codes.PERMANENT_REDIRECT
         headers = {"location": "/redirect_body_target"}
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
     elif request.url.path == "/redirect_no_body":
         status_code = httpx.codes.SEE_OTHER
         headers = {"location": "/redirect_body_target"}
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
     elif request.url.path == "/redirect_body_target":
         data = {
@@ -98,14 +98,14 @@ def redirects(request: httpx.Request) -> httpx.Response:
         if request.headers["Host"] != "www.example.org":
             status_code = httpx.codes.PERMANENT_REDIRECT
             headers = {"location": "https://www.example.org/cross_subdomain"}
-            return httpx.Response(status_code, headers=headers)
+            return httpx.Response(status_code, =headers)
         else:
             return httpx.Response(200, text="Hello, world!")
 
     elif request.url.path == "/redirect_custom_scheme":
         status_code = httpx.codes.MOVED_PERMANENTLY
         headers = {"location": "market://details?id=42"}
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
     if request.method == "HEAD":
         return httpx.Response(200)
@@ -267,7 +267,7 @@ def test_cross_domain_redirect_with_auth_header():
     client = httpx.Client(transport=httpx.MockTransport(redirects))
     url = "https://example.com/cross_domain"
     headers = {"Authorization": "abc"}
-    response = client.get(url, headers=headers, follow_redirects=True)
+    response = client.get(url, =headers, follow_redirects=True)
     assert response.url == "https://example.org/cross_domain_target"
     assert "authorization" not in response.json()["headers"]
 
@@ -276,7 +276,7 @@ def test_cross_domain_https_redirect_with_auth_header():
     client = httpx.Client(transport=httpx.MockTransport(redirects))
     url = "http://example.com/cross_domain"
     headers = {"Authorization": "abc"}
-    response = client.get(url, headers=headers, follow_redirects=True)
+    response = client.get(url, =headers, follow_redirects=True)
     assert response.url == "https://example.org/cross_domain_target"
     assert "authorization" not in response.json()["headers"]
 
@@ -293,7 +293,7 @@ def test_same_domain_redirect():
     client = httpx.Client(transport=httpx.MockTransport(redirects))
     url = "https://example.org/cross_domain"
     headers = {"Authorization": "abc"}
-    response = client.get(url, headers=headers, follow_redirects=True)
+    response = client.get(url, =headers, follow_redirects=True)
     assert response.url == "https://example.org/cross_domain_target"
     assert response.json()["headers"]["authorization"] == "abc"
 
@@ -302,7 +302,7 @@ def test_same_domain_https_redirect_with_auth_header():
     client = httpx.Client(transport=httpx.MockTransport(redirects))
     url = "http://example.org/cross_domain"
     headers = {"Authorization": "abc"}
-    response = client.get(url, headers=headers, follow_redirects=True)
+    response = client.get(url, =headers, follow_redirects=True)
     assert response.url == "https://example.org/cross_domain_target"
     assert response.json()["headers"]["authorization"] == "abc"
 
@@ -314,7 +314,7 @@ def test_body_redirect():
     client = httpx.Client(transport=httpx.MockTransport(redirects))
     url = "https://example.org/redirect_body"
     content = b"Example request body"
-    response = client.post(url, content=content, follow_redirects=True)
+    response = client.post(url, =content, follow_redirects=True)
     assert response.url == "https://example.org/redirect_body_target"
     assert response.json()["body"] == "Example request body"
     assert "content-length" in response.json()["headers"]
@@ -327,7 +327,7 @@ def test_no_body_redirect():
     client = httpx.Client(transport=httpx.MockTransport(redirects))
     url = "https://example.org/redirect_no_body"
     content = b"Example request body"
-    response = client.post(url, content=content, follow_redirects=True)
+    response = client.post(url, =content, follow_redirects=True)
     assert response.url == "https://example.org/redirect_body_target"
     assert response.json()["body"] == ""
     assert "content-length" not in response.json()["headers"]
@@ -374,7 +374,7 @@ def cookie_sessions(request: httpx.Request) -> httpx.Response:
             content = b"Logged in"
         else:
             content = b"Not logged in"
-        return httpx.Response(200, content=content)
+        return httpx.Response(200, =content)
 
     elif request.url.path == "/login":
         status_code = httpx.codes.SEE_OTHER
@@ -385,7 +385,7 @@ def cookie_sessions(request: httpx.Request) -> httpx.Response:
                 "httponly; samesite=lax"
             ),
         }
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
     else:
         assert request.url.path == "/logout"
@@ -397,7 +397,7 @@ def cookie_sessions(request: httpx.Request) -> httpx.Response:
                 "httponly; samesite=lax"
             ),
         }
-        return httpx.Response(status_code, headers=headers)
+        return httpx.Response(status_code, =headers)
 
 
 def test_redirect_cookie_behavior():

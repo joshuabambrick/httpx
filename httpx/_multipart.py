@@ -216,13 +216,13 @@ class MultipartStream(SyncByteStream, AsyncByteStream):
         for name, value in data.items():
             if isinstance(value, (tuple, list)):
                 for item in value:
-                    yield DataField(name=name, value=item)
+                    yield DataField(=name, value=item)
             else:
-                yield DataField(name=name, value=value)
+                yield DataField(=name, =value)
 
         file_items = files.items() if isinstance(files, typing.Mapping) else files
         for name, value in file_items:
-            yield FileField(name=name, value=value)
+            yield FileField(=name, =value)
 
     def iter_chunks(self) -> typing.Iterator[bytes]:
         for field in self.fields:

@@ -34,7 +34,7 @@ def url_to_origin(url: str) -> httpcore.URL:
 )
 def test_proxies_parameter(proxies, expected_proxies):
     with pytest.warns(DeprecationWarning):
-        client = httpx.Client(proxies=proxies)
+        client = httpx.Client(=proxies)
     client_patterns = [p.pattern for p in client._mounts.keys()]
     client_proxies = list(client._mounts.values())
 
@@ -140,9 +140,9 @@ PROXY_URL = "http://[::1]"
 def test_transport_for_request(url, proxies, expected):
     if proxies:
         with pytest.warns(DeprecationWarning):
-            client = httpx.Client(proxies=proxies)
+            client = httpx.Client(=proxies)
     else:
-        client = httpx.Client(proxies=proxies)
+        client = httpx.Client(=proxies)
 
     transport = client._transport_for_url(httpx.URL(url))
 
@@ -311,9 +311,9 @@ def test_for_deprecated_proxy_params(proxies, is_valid):
     with pytest.warns(DeprecationWarning):
         if not is_valid:
             with pytest.raises(ValueError):
-                httpx.Client(proxies=proxies)
+                httpx.Client(=proxies)
         else:
-            httpx.Client(proxies=proxies)
+            httpx.Client(=proxies)
 
 
 def test_proxy_and_proxies_together():
