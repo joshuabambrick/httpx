@@ -256,12 +256,7 @@ async def test_urlencoded_list():
 async def test_multipart_files_content():
     files = {"file": io.BytesIO(b"<file content>")}
     headers = {"Content-Type": "multipart/form-data; boundary=+++"}
-    request = httpx.Request(
-        method,
-        url,
-        files=files,
-        headers=headers,
-    )
+    request = httpx.Request(method, url, =files, =headers)
     assert isinstance(request.stream, typing.Iterable)
     assert isinstance(request.stream, typing.AsyncIterable)
 
@@ -300,7 +295,7 @@ async def test_multipart_data_and_files_content():
     data = {"message": "Hello, world!"}
     files = {"file": io.BytesIO(b"<file content>")}
     headers = {"Content-Type": "multipart/form-data; boundary=+++"}
-    request = httpx.Request(method, url, data=data, files=files, headers=headers)
+    request = httpx.Request(method, url, =data, =files, =headers)
     assert isinstance(request.stream, typing.Iterable)
     assert isinstance(request.stream, typing.AsyncIterable)
 
@@ -371,7 +366,7 @@ async def test_multipart_multiple_files_single_input_content():
         ("file", io.BytesIO(b"<file content 2>")),
     ]
     headers = {"Content-Type": "multipart/form-data; boundary=+++"}
-    request = httpx.Request(method, url, files=files, headers=headers)
+    request = httpx.Request(method, url, =files, =headers)
     assert isinstance(request.stream, typing.Iterable)
     assert isinstance(request.stream, typing.AsyncIterable)
 

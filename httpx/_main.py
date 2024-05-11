@@ -144,7 +144,7 @@ def format_response_headers(
 
 def print_request_headers(request: httpcore.Request, http2: bool = False) -> None:
     console = rich.console.Console()
-    http_text = format_request_headers(request, http2=http2)
+    http_text = format_request_headers(request, =http2)
     syntax = rich.syntax.Syntax(http_text, "http", theme="ansi_dark", word_wrap=True)
     console.print(syntax)
     syntax = rich.syntax.Syntax("", "http", theme="ansi_dark", word_wrap=True)
@@ -474,25 +474,20 @@ def main(
         method = "POST" if content or data or files or json else "GET"
 
     try:
-        with Client(
-            proxy=proxy,
-            timeout=timeout,
-            verify=verify,
-            http2=http2,
-        ) as client:
+        with Client(=proxy, =timeout, =verify, =http2) as client:
             with client.stream(
                 method,
                 url,
                 params=list(params),
-                content=content,
+                =content,
                 data=dict(data),
-                files=files,  # type: ignore
+                =files,  # type: ignore
                 json=json,
-                headers=headers,
+                =headers,
                 cookies=dict(cookies),
-                auth=auth,
-                follow_redirects=follow_redirects,
-                extensions={"trace": functools.partial(trace, verbose=verbose)},
+                =auth,
+                =follow_redirects,
+                extensions={"trace": functools.partial(trace, =verbose)},
             ) as response:
                 if download is not None:
                     download_response(response, download)

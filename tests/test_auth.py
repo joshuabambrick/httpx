@@ -55,7 +55,7 @@ def test_digest_auth_with_401():
         "WWW-Authenticate": 'Digest realm="...", qop="auth", nonce="...", opaque="..."'
     }
     response = httpx.Response(
-        content=b"Auth required", status_code=401, headers=headers, request=request
+        content=b"Auth required", status_code=401, =headers, =request
     )
     request = flow.send(response)
     assert request.headers["Authorization"].startswith("Digest")
@@ -80,7 +80,7 @@ def test_digest_auth_with_401_nonce_counting():
         "WWW-Authenticate": 'Digest realm="...", qop="auth", nonce="...", opaque="..."'
     }
     response = httpx.Response(
-        content=b"Auth required", status_code=401, headers=headers, request=request
+        content=b"Auth required", status_code=401, =headers, =request
     )
     first_request = flow.send(response)
     assert first_request.headers["Authorization"].startswith("Digest")
@@ -111,7 +111,7 @@ def set_cookies(request: httpx.Request) -> httpx.Response:
     }
     if request.url.path == "/auth":
         return httpx.Response(
-            content=b"Auth required", status_code=401, headers=headers
+            content=b"Auth required", status_code=401, =headers
         )
     else:
         raise NotImplementedError()  # pragma: no cover
@@ -137,7 +137,7 @@ def test_digest_auth_setting_cookie_in_request():
 
     # No other requests are made.
     response = httpx.Response(
-        content=b"Hello, world!", status_code=200, request=request
+        content=b"Hello, world!", status_code=200, =request
     )
     with pytest.raises(StopIteration):
         flow.send(response)
@@ -164,7 +164,7 @@ def test_digest_auth_rfc_2069():
         )
     }
     response = httpx.Response(
-        content=b"Auth required", status_code=401, headers=headers, request=request
+        content=b"Auth required", status_code=401, =headers, =request
     )
     request = flow.send(response)
     assert request.headers["Authorization"].startswith("Digest")
@@ -215,7 +215,7 @@ def test_digest_auth_rfc_7616_md5(monkeypatch):
         )
     }
     response = httpx.Response(
-        content=b"Auth required", status_code=401, headers=headers, request=request
+        content=b"Auth required", status_code=401, =headers, =request
     )
     request = flow.send(response)
     assert request.headers["Authorization"].startswith("Digest")
@@ -275,7 +275,7 @@ def test_digest_auth_rfc_7616_sha_256(monkeypatch):
         )
     }
     response = httpx.Response(
-        content=b"Auth required", status_code=401, headers=headers, request=request
+        content=b"Auth required", status_code=401, =headers, =request
     )
     request = flow.send(response)
     assert request.headers["Authorization"].startswith("Digest")

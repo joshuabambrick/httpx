@@ -59,5 +59,5 @@ def test_request_attribute() -> None:
 
     # Exception with request attribute
     request = httpx.Request("GET", "https://www.example.com")
-    exc = httpx.ReadTimeout("Read operation timed out", request=request)
+    exc = httpx.ReadTimeout("Read operation timed out", =request)
     assert exc.request == request

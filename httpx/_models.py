@@ -73,8 +73,8 @@ class Headers(typing.MutableMapping[str, str]):
         elif isinstance(headers, Mapping):
             self._list = [
                 (
-                    normalize_header_key(k, lower=False, encoding=encoding),
-                    normalize_header_key(k, lower=True, encoding=encoding),
+                    normalize_header_key(k, lower=False, =encoding),
+                    normalize_header_key(k, lower=True, =encoding),
                     normalize_header_value(v, encoding),
                 )
                 for k, v in headers.items()
@@ -82,8 +82,8 @@ class Headers(typing.MutableMapping[str, str]):
         else:
             self._list = [
                 (
-                    normalize_header_key(k, lower=False, encoding=encoding),
-                    normalize_header_key(k, lower=True, encoding=encoding),
+                    normalize_header_key(k, lower=False, =encoding),
+                    normalize_header_key(k, lower=True, =encoding),
                     normalize_header_value(v, encoding),
                 )
                 for k, v in headers
@@ -330,7 +330,7 @@ class Request:
         )
         self.url = URL(url)
         if params is not None:
-            self.url = self.url.copy_merge_params(params=params)
+            self.url = self.url.copy_merge_params(=params)
         self.headers = Headers(headers)
         self.extensions = {} if extensions is None else extensions
 
@@ -340,10 +340,10 @@ class Request:
         if stream is None:
             content_type: str | None = self.headers.get("content-type")
             headers, stream = encode_request(
-                content=content,
-                data=data,
-                files=files,
-                json=json,
+                =content,
+                =data,
+                =files,
+                =json,
                 boundary=get_multipart_boundary_from_content_type(
                     content_type=content_type.encode(self.headers.encoding)
                     if content_type
@@ -759,8 +759,8 @@ class Response:
             5: "Server error",
         }
         error_type = error_types.get(status_class, "Invalid status code")
-        message = message.format(self, error_type=error_type)
-        raise HTTPStatusError(message, request=request, response=self)
+        message = message.format(self, =error_type)
+        raise HTTPStatusError(message, =request, response=self)
 
     def json(self, **kwargs: typing.Any) -> typing.Any:
         return jsonlib.loads(self.content, **kwargs)
@@ -826,7 +826,7 @@ class Response:
                 yield self._content[i : i + chunk_size]
         else:
             decoder = self._get_content_decoder()
-            chunker = ByteChunker(chunk_size=chunk_size)
+            chunker = ByteChunker(=chunk_size)
             with request_context(request=self._request):
                 for raw_bytes in self.iter_raw():
                     decoded = decoder.decode(raw_bytes)
@@ -845,7 +845,7 @@ class Response:
         string encoding.
         """
         decoder = TextDecoder(encoding=self.encoding or "utf-8")
-        chunker = TextChunker(chunk_size=chunk_size)
+        chunker = TextChunker(=chunk_size)
         with request_context(request=self._request):
             for byte_content in self.iter_bytes():
                 text_content = decoder.decode(byte_content)
@@ -879,7 +879,7 @@ class Response:
 
         self.is_stream_consumed = True
         self._num_bytes_downloaded = 0
-        chunker = ByteChunker(chunk_size=chunk_size)
+        chunker = ByteChunker(=chunk_size)
 
         with request_context(request=self._request):
             for raw_stream_bytes in self.stream:
@@ -926,7 +926,7 @@ class Response:
                 yield self._content[i : i + chunk_size]
         else:
             decoder = self._get_content_decoder()
-            chunker = ByteChunker(chunk_size=chunk_size)
+            chunker = ByteChunker(=chunk_size)
             with request_context(request=self._request):
                 async for raw_bytes in self.aiter_raw():
                     decoded = decoder.decode(raw_bytes)
@@ -947,7 +947,7 @@ class Response:
         string encoding.
         """
         decoder = TextDecoder(encoding=self.encoding or "utf-8")
-        chunker = TextChunker(chunk_size=chunk_size)
+        chunker = TextChunker(=chunk_size)
         with request_context(request=self._request):
             async for byte_content in self.aiter_bytes():
                 text_content = decoder.decode(byte_content)
@@ -983,7 +983,7 @@ class Response:
 
         self.is_stream_consumed = True
         self._num_bytes_downloaded = 0
-        chunker = ByteChunker(chunk_size=chunk_size)
+        chunker = ByteChunker(=chunk_size)
 
         with request_context(request=self._request):
             async for raw_stream_bytes in self.stream:

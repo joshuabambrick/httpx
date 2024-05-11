@@ -92,11 +92,11 @@ def test_raise_for_status():
     request = httpx.Request("GET", "https://example.org")
 
     # 2xx status codes are not an error.
-    response = httpx.Response(200, request=request)
+    response = httpx.Response(200, =request)
     response.raise_for_status()
 
     # 1xx status codes are informational responses.
-    response = httpx.Response(101, request=request)
+    response = httpx.Response(101, =request)
     assert response.is_informational
     with pytest.raises(httpx.HTTPStatusError) as exc_info:
         response.raise_for_status()
@@ -107,7 +107,7 @@ def test_raise_for_status():
 
     # 3xx status codes are redirections.
     headers = {"location": "https://other.org"}
-    response = httpx.Response(303, headers=headers, request=request)
+    response = httpx.Response(303, =headers, =request)
     assert response.is_redirect
     with pytest.raises(httpx.HTTPStatusError) as exc_info:
         response.raise_for_status()
@@ -118,7 +118,7 @@ def test_raise_for_status():
     )
 
     # 4xx status codes are a client error.
-    response = httpx.Response(403, request=request)
+    response = httpx.Response(403, =request)
     assert response.is_client_error
     assert response.is_error
     with pytest.raises(httpx.HTTPStatusError) as exc_info:
@@ -129,7 +129,7 @@ def test_raise_for_status():
     )
 
     # 5xx status codes are a server error.
-    response = httpx.Response(500, request=request)
+    response = httpx.Response(500, =request)
     assert response.is_server_error
     assert response.is_error
     with pytest.raises(httpx.HTTPStatusError) as exc_info:
@@ -160,11 +160,7 @@ def test_response_content_type_encoding():
     """
     headers = {"Content-Type": "text-plain; charset=latin-1"}
     content = "Latin 1: ÿ".encode("latin-1")
-    response = httpx.Response(
-        200,
-        content=content,
-        headers=headers,
-    )
+    response = httpx.Response(200, =content, =headers)
     assert response.text == "Latin 1: ÿ"
     assert response.encoding == "latin-1"
 
@@ -174,10 +170,7 @@ def test_response_default_to_utf8_encoding():
     Default to utf-8 encoding if there is no Content-Type header.
     """
     content = "おはようございます。".encode("utf-8")
-    response = httpx.Response(
-        200,
-        content=content,
-    )
+    response = httpx.Response(200, =content)
     assert response.text == "おはようございます。"
     assert response.encoding == "utf-8"
 
@@ -188,11 +181,7 @@ def test_response_fallback_to_utf8_encoding():
     """
     headers = {"Content-Type": "text-plain; charset=invalid-codec-name"}
     content = "おはようございます。".encode("utf-8")
-    response = httpx.Response(
-        200,
-        content=content,
-        headers=headers,
-    )
+    response = httpx.Response(200, =content, =headers)
     assert response.text == "おはようございます。"
     assert response.encoding == "utf-8"
 
@@ -204,11 +193,7 @@ def test_response_no_charset_with_ascii_content():
     """
     content = b"Hello, world!"
     headers = {"Content-Type": "text/plain"}
-    response = httpx.Response(
-        200,
-        content=content,
-        headers=headers,
-    )
+    response = httpx.Response(200, =content, =headers)
     assert response.status_code == 200
     assert response.encoding == "utf-8"
     assert response.text == "Hello, world!"
@@ -221,11 +206,7 @@ def test_response_no_charset_with_utf8_content():
     """
     content = "Unicode Snowman: ☃".encode("utf-8")
     headers = {"Content-Type": "text/plain"}
-    response = httpx.Response(
-        200,
-        content=content,
-        headers=headers,
-    )
+    response = httpx.Response(200, =content, =headers)
     assert response.text == "Unicode Snowman: ☃"
     assert response.encoding == "utf-8"
 
@@ -238,7 +219,7 @@ def test_response_no_charset_with_iso_8859_1_content():
     content = "Accented: Österreich abcdefghijklmnopqrstuzwxyz".encode("iso-8859-1")
     headers = {"Content-Type": "text/plain"}
     response = httpx.Response(
-        200, content=content, headers=headers, default_encoding=autodetect
+        200, =content, =headers, default_encoding=autodetect
     )
     assert response.text == "Accented: Österreich abcdefghijklmnopqrstuzwxyz"
     assert response.charset_encoding is None
@@ -252,7 +233,7 @@ def test_response_no_charset_with_cp_1252_content():
     content = "Euro Currency: € abcdefghijklmnopqrstuzwxyz".encode("cp1252")
     headers = {"Content-Type": "text/plain"}
     response = httpx.Response(
-        200, content=content, headers=headers, default_encoding=autodetect
+        200, =content, =headers, default_encoding=autodetect
     )
     assert response.text == "Euro Currency: € abcdefghijklmnopqrstuzwxyz"
     assert response.charset_encoding is None
@@ -263,11 +244,7 @@ def test_response_non_text_encoding():
     Default to attempting utf-8 encoding for non-text content-type headers.
     """
     headers = {"Content-Type": "image/png"}
-    response = httpx.Response(
-        200,
-        content=b"xyz",
-        headers=headers,
-    )
+    response = httpx.Response(200, content=b"xyz", =headers)
     assert response.text == "xyz"
     assert response.encoding == "utf-8"
 
@@ -279,7 +256,7 @@ def test_response_set_explicit_encoding():
     response = httpx.Response(
         200,
         content="Latin 1: ÿ".encode("latin-1"),
-        headers=headers,
+        =headers,
     )
     response.encoding = "latin-1"
     assert response.text == "Latin 1: ÿ"
@@ -790,11 +767,7 @@ def test_json_with_specified_encoding():
     data = {"greeting": "hello", "recipient": "world"}
     content = json.dumps(data).encode("utf-16")
     headers = {"Content-Type": "application/json, charset=utf-16"}
-    response = httpx.Response(
-        200,
-        content=content,
-        headers=headers,
-    )
+    response = httpx.Response(200, =content, =headers)
     assert response.json() == data
 
 
@@ -802,11 +775,7 @@ def test_json_with_options():
     data = {"greeting": "hello", "recipient": "world", "amount": 1}
     content = json.dumps(data).encode("utf-16")
     headers = {"Content-Type": "application/json, charset=utf-16"}
-    response = httpx.Response(
-        200,
-        content=content,
-        headers=headers,
-    )
+    response = httpx.Response(200, =content, =headers)
     assert response.json(parse_int=str)["amount"] == "1"
 
 
@@ -827,11 +796,7 @@ def test_json_without_specified_charset(encoding):
     data = {"greeting": "hello", "recipient": "world"}
     content = json.dumps(data).encode(encoding)
     headers = {"Content-Type": "application/json"}
-    response = httpx.Response(
-        200,
-        content=content,
-        headers=headers,
-    )
+    response = httpx.Response(200, =content, =headers)
     assert response.json() == data
 
 
@@ -852,11 +817,7 @@ def test_json_with_specified_charset(encoding):
     data = {"greeting": "hello", "recipient": "world"}
     content = json.dumps(data).encode(encoding)
     headers = {"Content-Type": f"application/json; charset={encoding}"}
-    response = httpx.Response(
-        200,
-        content=content,
-        headers=headers,
-    )
+    response = httpx.Response(200, =content, =headers)
     assert response.json() == data
 
 
@@ -877,11 +838,7 @@ def test_json_with_specified_charset(encoding):
     ],
 )
 def test_link_headers(headers, expected):
-    response = httpx.Response(
-        200,
-        content=None,
-        headers=headers,
-    )
+    response = httpx.Response(200, content=None, =headers)
     assert response.links == expected
 
 
@@ -890,16 +847,12 @@ def test_decode_error_with_request(header_value):
     headers = [(b"Content-Encoding", header_value)]
     broken_compressed_body = b"xxxxxxxxxxxxxx"
     with pytest.raises(httpx.DecodingError):
-        httpx.Response(
-            200,
-            headers=headers,
-            content=broken_compressed_body,
-        )
+        httpx.Response(200, =headers, content=broken_compressed_body)
 
     with pytest.raises(httpx.DecodingError):
         httpx.Response(
             200,
-            headers=headers,
+            =headers,
             content=broken_compressed_body,
             request=httpx.Request("GET", "https://www.example.org/"),
         )
@@ -910,7 +863,7 @@ def test_value_error_without_request(header_value):
     headers = [(b"Content-Encoding", header_value)]
     broken_compressed_body = b"xxxxxxxxxxxxxx"
     with pytest.raises(httpx.DecodingError):
-        httpx.Response(200, headers=headers, content=broken_compressed_body)
+        httpx.Response(200, =headers, content=broken_compressed_body)
 
 
 def test_response_with_unset_request():
@@ -951,7 +904,7 @@ def test_generator_with_content_length_header():
         yield b"test 123"  # pragma: no cover
 
     headers = {"Content-Length": "8"}
-    response = httpx.Response(200, content=content(), headers=headers)
+    response = httpx.Response(200, content=content(), =headers)
     assert response.headers == {"Content-Length": "8"}
 
 
@@ -1007,7 +960,7 @@ def test_response_decode_text_using_autodetect():
         "plus complète le fond du génie français."
     )
     content = text.encode("ISO-8859-1")
-    response = httpx.Response(200, content=content, default_encoding=autodetect)
+    response = httpx.Response(200, =content, default_encoding=autodetect)
 
     assert response.status_code == 200
     assert response.reason_phrase == "OK"
@@ -1029,7 +982,7 @@ def test_response_decode_text_using_explicit_encoding():
         "plus complète le fond du génie français."
     )
     content = text.encode("cp1252")
-    response = httpx.Response(200, content=content, default_encoding="cp1252")
+    response = httpx.Response(200, =content, default_encoding="cp1252")
 
     assert response.status_code == 200
     assert response.reason_phrase == "OK"

@@ -31,13 +31,13 @@ from .common import TESTS_DIR
 )
 def test_encoded(encoding):
     content = '{"abc": 123}'.encode(encoding)
-    response = httpx.Response(200, content=content)
+    response = httpx.Response(200, =content)
     assert response.json() == {"abc": 123}
 
 
 def test_bad_utf_like_encoding():
     content = b"\x00\x00\x00\x00"
-    response = httpx.Response(200, content=content)
+    response = httpx.Response(200, =content)
     with pytest.raises(json.decoder.JSONDecodeError):
         response.json()
 
@@ -53,7 +53,7 @@ def test_bad_utf_like_encoding():
 )
 def test_guess_by_bom(encoding, expected):
     content = '\ufeff{"abc": 123}'.encode(encoding)
-    response = httpx.Response(200, content=content)
+    response = httpx.Response(200, =content)
     assert response.json() == {"abc": 123}
 
 

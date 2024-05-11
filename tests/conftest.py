@@ -243,7 +243,7 @@ class TestServer(Server):
 
         loop = asyncio.get_event_loop()
         tasks = {
-            loop.create_task(super().serve(sockets=sockets)),
+            loop.create_task(super().serve(=sockets)),
             loop.create_task(self.watch_restarts()),
         }
         await asyncio.wait(tasks)
@@ -288,20 +288,20 @@ def serve_in_thread(server: TestServer) -> typing.Iterator[TestServer]:
 
 @pytest.fixture(scope="session")
 def server() -> typing.Iterator[TestServer]:
-    config = Config(app=app, lifespan="off", loop="asyncio")
-    server = TestServer(config=config)
+    config = Config(=app, lifespan="off", loop="asyncio")
+    server = TestServer(=config)
     yield from serve_in_thread(server)
 
 
 @pytest.fixture(scope="session")
 def https_server(cert_pem_file, cert_private_key_file):
     config = Config(
-        app=app,
+        =app,
         lifespan="off",
         ssl_certfile=cert_pem_file,
         ssl_keyfile=cert_private_key_file,
         port=8001,
         loop="asyncio",
     )
-    server = TestServer(config=config)
+    server = TestServer(=config)
     yield from serve_in_thread(server)

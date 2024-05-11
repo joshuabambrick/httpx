@@ -25,7 +25,7 @@ def test_event_hooks():
     event_hooks = {"request": [on_request], "response": [on_response]}
 
     with httpx.Client(
-        event_hooks=event_hooks, transport=httpx.MockTransport(app)
+        =event_hooks, transport=httpx.MockTransport(app)
     ) as http:
         http.get("http://127.0.0.1:8000/", auth=("username", "password"))
 
@@ -55,7 +55,7 @@ def test_event_hooks_raising_exception(server):
     event_hooks = {"response": [raise_on_4xx_5xx]}
 
     with httpx.Client(
-        event_hooks=event_hooks, transport=httpx.MockTransport(app)
+        =event_hooks, transport=httpx.MockTransport(app)
     ) as http:
         try:
             http.get("http://127.0.0.1:8000/status/400")
@@ -76,7 +76,7 @@ async def test_async_event_hooks():
     event_hooks = {"request": [on_request], "response": [on_response]}
 
     async with httpx.AsyncClient(
-        event_hooks=event_hooks, transport=httpx.MockTransport(app)
+        =event_hooks, transport=httpx.MockTransport(app)
     ) as http:
         await http.get("http://127.0.0.1:8000/", auth=("username", "password"))
 
@@ -107,7 +107,7 @@ async def test_async_event_hooks_raising_exception():
     event_hooks = {"response": [raise_on_4xx_5xx]}
 
     async with httpx.AsyncClient(
-        event_hooks=event_hooks, transport=httpx.MockTransport(app)
+        =event_hooks, transport=httpx.MockTransport(app)
     ) as http:
         try:
             await http.get("http://127.0.0.1:8000/status/400")
@@ -131,7 +131,7 @@ def test_event_hooks_with_redirect():
     event_hooks = {"request": [on_request], "response": [on_response]}
 
     with httpx.Client(
-        event_hooks=event_hooks,
+        =event_hooks,
         transport=httpx.MockTransport(app),
         follow_redirects=True,
     ) as http:
@@ -188,7 +188,7 @@ async def test_async_event_hooks_with_redirect():
     event_hooks = {"request": [on_request], "response": [on_response]}
 
     async with httpx.AsyncClient(
-        event_hooks=event_hooks,
+        =event_hooks,
         transport=httpx.MockTransport(app),
         follow_redirects=True,
     ) as http:

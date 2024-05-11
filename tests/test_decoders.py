@@ -22,11 +22,7 @@ def test_deflate():
     compressed_body = compressor.compress(body) + compressor.flush()
 
     headers = [(b"Content-Encoding", b"deflate")]
-    response = httpx.Response(
-        200,
-        headers=headers,
-        content=compressed_body,
-    )
+    response = httpx.Response(200, =headers, content=compressed_body)
     assert response.content == body
 
 
@@ -40,11 +36,7 @@ def test_zlib():
     compressed_body = zlib.compress(body)
 
     headers = [(b"Content-Encoding", b"deflate")]
-    response = httpx.Response(
-        200,
-        headers=headers,
-        content=compressed_body,
-    )
+    response = httpx.Response(200, =headers, content=compressed_body)
     assert response.content == body
 
 
@@ -54,11 +46,7 @@ def test_gzip():
     compressed_body = compressor.compress(body) + compressor.flush()
 
     headers = [(b"Content-Encoding", b"gzip")]
-    response = httpx.Response(
-        200,
-        headers=headers,
-        content=compressed_body,
-    )
+    response = httpx.Response(200, =headers, content=compressed_body)
     assert response.content == body
 
 
@@ -67,11 +55,7 @@ def test_brotli():
     compressed_body = b"\x8b\x03\x80test 123\x03"
 
     headers = [(b"Content-Encoding", b"br")]
-    response = httpx.Response(
-        200,
-        headers=headers,
-        content=compressed_body,
-    )
+    response = httpx.Response(200, =headers, content=compressed_body)
     assert response.content == body
 
 
@@ -80,11 +64,7 @@ def test_zstd():
     compressed_body = zstd.compress(body)
 
     headers = [(b"Content-Encoding", b"zstd")]
-    response = httpx.Response(
-        200,
-        headers=headers,
-        content=compressed_body,
-    )
+    response = httpx.Response(200, =headers, content=compressed_body)
     assert response.content == body
 
 
@@ -93,11 +73,7 @@ def test_zstd_decoding_error():
 
     headers = [(b"Content-Encoding", b"zstd")]
     with pytest.raises(httpx.DecodingError):
-        httpx.Response(
-            200,
-            headers=headers,
-            content=compressed_body,
-        )
+        httpx.Response(200, =headers, content=compressed_body)
 
 
 def test_zstd_multiframe():
@@ -117,7 +93,7 @@ def test_zstd_multiframe():
     compressed_body = io.BytesIO(data)
 
     headers = [(b"Content-Encoding", b"zstd")]
-    response = httpx.Response(200, headers=headers, content=compressed_body)
+    response = httpx.Response(200, =headers, content=compressed_body)
     response.read()
     assert response.content == b"foobar"
 
@@ -134,11 +110,7 @@ def test_multi():
     )
 
     headers = [(b"Content-Encoding", b"deflate, gzip")]
-    response = httpx.Response(
-        200,
-        headers=headers,
-        content=compressed_body,
-    )
+    response = httpx.Response(200, =headers, content=compressed_body)
     assert response.content == body
 
 
@@ -147,19 +119,11 @@ def test_multi_with_identity():
     compressed_body = b"\x8b\x03\x80test 123\x03"
 
     headers = [(b"Content-Encoding", b"br, identity")]
-    response = httpx.Response(
-        200,
-        headers=headers,
-        content=compressed_body,
-    )
+    response = httpx.Response(200, =headers, content=compressed_body)
     assert response.content == body
 
     headers = [(b"Content-Encoding", b"identity, br")]
-    response = httpx.Response(
-        200,
-        headers=headers,
-        content=compressed_body,
-    )
+    response = httpx.Response(200, =headers, content=compressed_body)
     assert response.content == body
 
 
@@ -173,11 +137,7 @@ async def test_streaming():
         yield compressor.flush()
 
     headers = [(b"Content-Encoding", b"gzip")]
-    response = httpx.Response(
-        200,
-        headers=headers,
-        content=compress(body),
-    )
+    response = httpx.Response(200, =headers, content=compress(body))
     assert not hasattr(response, "body")
     assert await response.aread() == body
 
@@ -185,18 +145,14 @@ async def test_streaming():
 @pytest.mark.parametrize("header_value", (b"deflate", b"gzip", b"br", b"identity"))
 def test_empty_content(header_value):
     headers = [(b"Content-Encoding", header_value)]
-    response = httpx.Response(
-        200,
-        headers=headers,
-        content=b"",
-    )
+    response = httpx.Response(200, =headers, content=b"")
     assert response.content == b""
 
 
 @pytest.mark.parametrize("header_value", (b"deflate", b"gzip", b"br", b"identity"))
 def test_decoders_empty_cases(header_value):
     headers = [(b"Content-Encoding", header_value)]
-    response = httpx.Response(content=b"", status_code=200, headers=headers)
+    response = httpx.Response(content=b"", status_code=200, =headers)
     assert response.read() == b""
 
 
@@ -206,10 +162,10 @@ def test_decoding_errors(header_value):
     compressed_body = b"invalid"
     with pytest.raises(httpx.DecodingError):
         request = httpx.Request("GET", "https://example.org")
-        httpx.Response(200, headers=headers, content=compressed_body, request=request)
+        httpx.Response(200, =headers, content=compressed_body, =request)
 
     with pytest.raises(httpx.DecodingError):
-        httpx.Response(200, headers=headers, content=compressed_body)
+        httpx.Response(200, =headers, content=compressed_body)
 
 
 @pytest.mark.parametrize(
@@ -328,9 +284,5 @@ def test_invalid_content_encoding_header():
     headers = [(b"Content-Encoding", b"invalid-header")]
     body = b"test 123"
 
-    response = httpx.Response(
-        200,
-        headers=headers,
-        content=body,
-    )
+    response = httpx.Response(200, =headers, content=body)
     assert response.content == body

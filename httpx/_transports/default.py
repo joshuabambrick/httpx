@@ -136,21 +136,21 @@ class HTTPTransport(BaseTransport):
         retries: int = 0,
         socket_options: typing.Iterable[SOCKET_OPTION] | None = None,
     ) -> None:
-        ssl_context = create_ssl_context(verify=verify, cert=cert, trust_env=trust_env)
+        ssl_context = create_ssl_context(=verify, =cert, =trust_env)
         proxy = Proxy(url=proxy) if isinstance(proxy, (str, URL)) else proxy
 
         if proxy is None:
             self._pool = httpcore.ConnectionPool(
-                ssl_context=ssl_context,
+                =ssl_context,
                 max_connections=limits.max_connections,
                 max_keepalive_connections=limits.max_keepalive_connections,
                 keepalive_expiry=limits.keepalive_expiry,
-                http1=http1,
-                http2=http2,
-                uds=uds,
-                local_address=local_address,
-                retries=retries,
-                socket_options=socket_options,
+                =http1,
+                =http2,
+                =uds,
+                =local_address,
+                =retries,
+                =socket_options,
             )
         elif proxy.url.scheme in ("http", "https"):
             self._pool = httpcore.HTTPProxy(
@@ -162,14 +162,14 @@ class HTTPTransport(BaseTransport):
                 ),
                 proxy_auth=proxy.raw_auth,
                 proxy_headers=proxy.headers.raw,
-                ssl_context=ssl_context,
+                =ssl_context,
                 proxy_ssl_context=proxy.ssl_context,
                 max_connections=limits.max_connections,
                 max_keepalive_connections=limits.max_keepalive_connections,
                 keepalive_expiry=limits.keepalive_expiry,
-                http1=http1,
-                http2=http2,
-                socket_options=socket_options,
+                =http1,
+                =http2,
+                =socket_options,
             )
         elif proxy.url.scheme == "socks5":
             try:
@@ -188,12 +188,12 @@ class HTTPTransport(BaseTransport):
                     target=proxy.url.raw_path,
                 ),
                 proxy_auth=proxy.raw_auth,
-                ssl_context=ssl_context,
+                =ssl_context,
                 max_connections=limits.max_connections,
                 max_keepalive_connections=limits.max_keepalive_connections,
                 keepalive_expiry=limits.keepalive_expiry,
-                http1=http1,
-                http2=http2,
+                =http1,
+                =http2,
             )
         else:  # pragma: no cover
             raise ValueError(
@@ -277,21 +277,21 @@ class AsyncHTTPTransport(AsyncBaseTransport):
         retries: int = 0,
         socket_options: typing.Iterable[SOCKET_OPTION] | None = None,
     ) -> None:
-        ssl_context = create_ssl_context(verify=verify, cert=cert, trust_env=trust_env)
+        ssl_context = create_ssl_context(=verify, =cert, =trust_env)
         proxy = Proxy(url=proxy) if isinstance(proxy, (str, URL)) else proxy
 
         if proxy is None:
             self._pool = httpcore.AsyncConnectionPool(
-                ssl_context=ssl_context,
+                =ssl_context,
                 max_connections=limits.max_connections,
                 max_keepalive_connections=limits.max_keepalive_connections,
                 keepalive_expiry=limits.keepalive_expiry,
-                http1=http1,
-                http2=http2,
-                uds=uds,
-                local_address=local_address,
-                retries=retries,
-                socket_options=socket_options,
+                =http1,
+                =http2,
+                =uds,
+                =local_address,
+                =retries,
+                =socket_options,
             )
         elif proxy.url.scheme in ("http", "https"):
             self._pool = httpcore.AsyncHTTPProxy(
@@ -303,13 +303,13 @@ class AsyncHTTPTransport(AsyncBaseTransport):
                 ),
                 proxy_auth=proxy.raw_auth,
                 proxy_headers=proxy.headers.raw,
-                ssl_context=ssl_context,
+                =ssl_context,
                 max_connections=limits.max_connections,
                 max_keepalive_connections=limits.max_keepalive_connections,
                 keepalive_expiry=limits.keepalive_expiry,
-                http1=http1,
-                http2=http2,
-                socket_options=socket_options,
+                =http1,
+                =http2,
+                =socket_options,
             )
         elif proxy.url.scheme == "socks5":
             try:
@@ -328,12 +328,12 @@ class AsyncHTTPTransport(AsyncBaseTransport):
                     target=proxy.url.raw_path,
                 ),
                 proxy_auth=proxy.raw_auth,
-                ssl_context=ssl_context,
+                =ssl_context,
                 max_connections=limits.max_connections,
                 max_keepalive_connections=limits.max_keepalive_connections,
                 keepalive_expiry=limits.keepalive_expiry,
-                http1=http1,
-                http2=http2,
+                =http1,
+                =http2,
             )
         else:  # pragma: no cover
             raise ValueError(

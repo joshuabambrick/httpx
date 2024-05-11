@@ -183,7 +183,7 @@ def test_delete(server):
 
 def test_base_url(server):
     base_url = server.url
-    with httpx.Client(base_url=base_url) as client:
+    with httpx.Client(=base_url) as client:
         response = client.get("/")
     assert response.status_code == 200
     assert response.url == base_url
@@ -250,7 +250,7 @@ def test_context_managed_transport():
             self.events.append("transport.__exit__")
 
     transport = Transport()
-    with httpx.Client(transport=transport):
+    with httpx.Client(=transport):
         pass
 
     assert transport.events == [
@@ -283,7 +283,7 @@ def test_context_managed_transport_and_mount():
 
     transport = Transport(name="transport")
     mounted = Transport(name="mounted")
-    with httpx.Client(transport=transport, mounts={"http://www.example.org": mounted}):
+    with httpx.Client(=transport, mounts={"http://www.example.org": mounted}):
         pass
 
     assert transport.events == [
@@ -349,7 +349,7 @@ def test_raw_client_header():
     headers = {"Example-Header": "example-value"}
 
     client = httpx.Client(
-        transport=httpx.MockTransport(echo_raw_headers), headers=headers
+        transport=httpx.MockTransport(echo_raw_headers), =headers
     )
     response = client.get(url)
 
@@ -378,7 +378,7 @@ def test_mounted_transport():
     transport = httpx.MockTransport(unmounted)
     mounts = {"custom://": httpx.MockTransport(mounted)}
 
-    client = httpx.Client(transport=transport, mounts=mounts)
+    client = httpx.Client(=transport, =mounts)
 
     response = client.get("https://www.example.com")
     assert response.status_code == 200
@@ -392,7 +392,7 @@ def test_mounted_transport():
 def test_all_mounted_transport():
     mounts = {"all://": httpx.MockTransport(mounted)}
 
-    client = httpx.Client(mounts=mounts)
+    client = httpx.Client(=mounts)
 
     response = client.get("https://www.example.com")
     assert response.status_code == 200
@@ -423,10 +423,10 @@ def test_client_decode_text_using_autodetect():
 
     def cp1252_but_no_content_type(request):
         content = text.encode("ISO-8859-1")
-        return httpx.Response(200, content=content)
+        return httpx.Response(200, =content)
 
     transport = httpx.MockTransport(cp1252_but_no_content_type)
-    with httpx.Client(transport=transport, default_encoding=autodetect) as client:
+    with httpx.Client(=transport, default_encoding=autodetect) as client:
         response = client.get("http://www.example.com")
 
         assert response.status_code == 200
@@ -450,10 +450,10 @@ def test_client_decode_text_using_explicit_encoding():
 
     def cp1252_but_no_content_type(request):
         content = text.encode("ISO-8859-1")
-        return httpx.Response(200, content=content)
+        return httpx.Response(200, =content)
 
     transport = httpx.MockTransport(cp1252_but_no_content_type)
-    with httpx.Client(transport=transport, default_encoding=autodetect) as client:
+    with httpx.Client(=transport, default_encoding=autodetect) as client:
         response = client.get("http://www.example.com")
 
         assert response.status_code == 200

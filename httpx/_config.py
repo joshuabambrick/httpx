@@ -52,9 +52,7 @@ def create_ssl_context(
     trust_env: bool = True,
     http2: bool = False,
 ) -> ssl.SSLContext:
-    return SSLConfig(
-        cert=cert, verify=verify, trust_env=trust_env, http2=http2
-    ).ssl_context
+    return SSLConfig(=cert, =verify, =trust_env, =http2).ssl_context
 
 
 class SSLConfig:
@@ -146,11 +144,11 @@ class SSLConfig:
         if ca_bundle_path.is_file():
             cafile = str(ca_bundle_path)
             logger.debug("load_verify_locations cafile=%r", cafile)
-            context.load_verify_locations(cafile=cafile)
+            context.load_verify_locations(=cafile)
         elif ca_bundle_path.is_dir():
             capath = str(ca_bundle_path)
             logger.debug("load_verify_locations capath=%r", capath)
-            context.load_verify_locations(capath=capath)
+            context.load_verify_locations(=capath)
 
         self._load_client_certs(context)
 
